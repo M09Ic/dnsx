@@ -175,16 +175,7 @@ func (r *Runner) prepareInput() error {
 		return fmt.Errorf("hosts file or stdin not provided")
 	}
 
-	//var domains []string
-	//if r.options.Domain != "" {
-	//	domains = []string{r.options.Domain}
-	//} else if r.options.DomainsFile != "" {
-	//	content, err := ioutil.ReadFile(r.options.DomainsFile)
-	//	if err != nil {
-	//		return err
-	//	}
-	//	domains = strings.Split(string(content), "\n")
-	//}
+	// read wordlist file
 	var prefixs []string
 	if r.options.Enum {
 		content, err := ioutil.ReadFile(r.options.WordListFile)
@@ -202,6 +193,7 @@ func (r *Runner) prepareInput() error {
 		if r.options.Enum {
 			var subdomain string
 			for _, prefix := range prefixs {
+				// domains Cartesian product with wordlist
 				subdomain = strings.TrimSpace(prefix) + "." + item
 				hosts = append(hosts, subdomain)
 			}

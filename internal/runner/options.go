@@ -77,8 +77,6 @@ func ParseOptions() *Options {
 
 	createGroup(flagSet, "input", "Input",
 		flagSet.StringVarP(&options.Hosts, "list", "l", "", "File input with list of sub(domains)/hosts"),
-		//flagSet.StringVarP(&options.Domain, "domain", "d", "", "Domain to find subdomains for"),
-		//flagSet.StringVarP(&options.DomainsFile, "domains", "dL", "", "File containing list of domains to enumerate"),
 	)
 
 	createGroup(flagSet, "query", "Query",
@@ -165,12 +163,8 @@ func (options *Options) validateOptions() {
 		gologger.Fatal().Msgf("resp and resp-only can't be used at the same time")
 	}
 
-	if (options.Domain != "" || options.DomainsFile != "") && options.Hosts != "" {
-		gologger.Fatal().Msgf("-l and -d/-dL can't be used at the same time")
-	}
-
-	if (options.Domain != "" || options.DomainsFile != "") && (options.WordListFile == "" && !fileutil.HasStdin()) {
-		gologger.Fatal().Msgf("-d/-dL must set wordlist(-w)")
+	if options.WordListFile == "" && options.Enum {
+		gologger.Fatal().Msgf("please input wordlist file with -w flag")
 	}
 }
 
